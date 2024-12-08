@@ -1,4 +1,5 @@
 import { UserModel } from "../models/user.js";
+import { hashPassword, comparePassword } from "../helpers/auth.js";
 
 export const test = (req, res) => {
   res.json("controller working");
@@ -25,8 +26,13 @@ export const registerUser = async (req, res) => {
         error: "email already used",
       });
     }
-    // if all informations are good, create a user in db and return it
-    const user = await UserModel.create({ name, email, password });
+    // if all informations are good, hash pw and create a user in db and return it
+    const hashedPassword = await hashPassword(password);
+    const user = await UserModel.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
     return res.json(user);
   } catch (error) {
     console.log(error);

@@ -13,3 +13,4 @@ I follow this tutorial : https://www.youtube.com/watch?v=XPC81RWOItI
 -create register async function in authController, check form infos and if all good return user
 -add toast popup
 -navigate if register submit infos are ok in register page
+-hash password bcrypt
