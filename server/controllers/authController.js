@@ -38,3 +38,25 @@ export const registerUser = async (req, res) => {
     console.log(error);
   }
 };
+
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // check if user exists
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.json({
+        error: "No user found",
+      });
+    }
+
+    // check if the given password matches the hashed password
+    const match = await comparePassword(password, user.password);
+    if (match) {
+      console.log("match");
+      return res.json("Matching passwords");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
