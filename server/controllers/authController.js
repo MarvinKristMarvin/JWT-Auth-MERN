@@ -1,5 +1,6 @@
 import { UserModel } from "../models/user.js";
 import { hashPassword, comparePassword } from "../helpers/auth.js";
+import jwt from "jsonwebtoken";
 
 export const test = (req, res) => {
   res.json("controller working");
@@ -53,10 +54,37 @@ export const loginUser = async (req, res) => {
     // check if the given password matches the hashed password
     const match = await comparePassword(password, user.password);
     if (match) {
-      console.log("match");
-      return res.json("Matching passwords");
+      // creates a jwt with user data to encode
+      jwt.sign(
+        { email: user.email, id: user._id, name: user.name },
+        process.env.JWT_SECRET,
+        {},
+        (err, token) => {
+          if (err) throw err;
+          // if successfull, send token to client in a cookie names token
+          // and send user data back as a response
+          return res.cookie("token", token).json(user);
+        }
+      );
+    }
+    if (!match) {
+      return res.json({ error: "Passwords do not match" });
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getProfile = (req, res) => {
+  const { token } = req.cookies;
+  if (token) {
+    // checks authenticity of the token + callback to handle the result of verification
+    jwt.verify(token, process.env.JWT_SECRET, {}, (err, user) => {
+      if (err) throw err;
+      // sends decoded token payload
+      res.json(user);
+    });
+  } else {
+    res.json(null);
   }
 };

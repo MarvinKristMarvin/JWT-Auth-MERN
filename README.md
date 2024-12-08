@@ -14,3 +14,7 @@ I follow this tutorial : https://www.youtube.com/watch?v=XPC81RWOItI
 -add toast popup
 -navigate if register submit infos are ok in register page
 -hash password bcrypt
+-do login
+-install jsonwebtoken and cookie-parser
+-work on jwt + cookieparser
+-create a context to access jwt everywhere
