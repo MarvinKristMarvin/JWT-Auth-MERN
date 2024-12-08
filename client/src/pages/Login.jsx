@@ -26,7 +26,7 @@ export default function Login() {
         // empty the form
         console.log("no error");
         setData({});
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.log("catch");
